@@ -1,0 +1,23 @@
+{
+    "Academic": true,
+    "Authentication": true,
+    "Examination": true,
+    "Library": true,
+    "SystemConfiguration": true,
+    "Accounting": true,
+    "Finance": true,
+    "LayoutCert": true,
+    "SMS": true,
+    "Student": true,
+    "Teacher": true,
+    "Payroll": true,
+    "Frontend": true,
+    "Gateways": true,
+    "Hostel": true,
+    "Transport": true,
+    "ParentModule": true,
+    "QuestionBank": true,
+    "Elearning": true,
+    "Ai": true,
+    "Inventory": true
+}

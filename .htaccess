@@ -1,0 +1,79 @@
+<IfModule mod_rewrite.c>
+
+Options -MultiViews -Indexes
+
+RewriteEngine On
+
+
+# --------------------------------
+# Protect .env file
+# --------------------------------
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+
+# --------------------------------
+# Block dangerous upload files
+# --------------------------------
+RewriteRule ^public/uploads/.*\.(php|php5|phtml|phar|exe|sh|py|pl|cgi|zip)$ - [NC,F]
+
+
+# --------------------------------
+# Authorization Header
+# --------------------------------
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+
+# --------------------------------
+# Remove /public from assets
+# Example:
+# /images/test.png
+# loads from /public/images/test.png
+# --------------------------------
+
+RewriteRule ^(images|css|js|fonts|assets|uploads|storage|build)/(.*)$ public/$1/$2 [L]
+
+
+# --------------------------------
+# Storage URL
+# --------------------------------
+RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+
+# --------------------------------
+# Existing public files
+# --------------------------------
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+
+# --------------------------------
+# Existing folders
+# --------------------------------
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+
+# --------------------------------
+# Laravel Front Controller
+# --------------------------------
+RewriteRule ^ public/index.php [L]
+
+
+</IfModule>
+
+
+# --------------------------------
+# Image CORS
+# --------------------------------
+
+<IfModule mod_headers.c>
+
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+</IfModule>
