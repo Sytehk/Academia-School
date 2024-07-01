@@ -1,0 +1,505 @@
+@extends('layouts.backend')
+
+@section('page_title_breadcrumb')
+    {{ _lang('Student') }}
+@endsection
+
+@section('create-button')
+    <a class="btn btn-sm fw-bold btn-primary" href="{{ route('students.bulk-file-upload') }}">
+        {{ _lang('CSV/Xlsx Upload File') }}
+    </a>
+@endsection
+
+@section('content')
+    <form action="{{ route('students.update', $student->id) }}" enctype="multipart/form-data" method="post">
+        @csrf
+        @method('PUT')
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('First Name') }} <span class='text-danger'>*</span></label>
+                    <input type="text" class="form-control" id="first_name" name="first_name"
+                        value="{{ $student->first_name }}" placeholder="First Name" required>
+
+                    @error('first_name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Last Name') }} <span
+                            class="text-info">(optional)</span></label>
+                    <input type="text" class="form-control" id="last_name" name="last_name"
+                        value="{{ $student->last_name }}" placeholder="Last Name">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Father Name') }} <span
+                            class="text-info">(optional)</span></label>
+                    <input type="text" class="form-control" name="father_name" value="{{ $student->father_name }}"
+                        placeholder="Father Name">
+
+                    @error('father_name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Mother Name') }} <span
+                            class="text-info">(optional)</span></label>
+                    <input type="text" class="form-control" name="mother_name" value="{{ $student->mother_name }}"
+                        placeholder="Mother Name">
+
+                    @error('mother_name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Class') }} <span class='text-danger'>*</span></label>
+                    <select name="class_id" class="form-select form-select-sm form-select-solid" data-control="select2"
+                        id="class_id" required>
+                        {!! create_option('classes', 'id', 'class_name', $student->studentSession?->class_id) !!}
+                    </select>
+
+                    @error('class_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Group') }} <span class='text-danger'>*</span></label>
+                    <select name="group" id="group" class="form-select form-select-sm form-select-solid"
+                        data-control="select2">
+
+                        {!! create_option('student_groups', 'id', 'group_name', $student->studentSession?->group_id) !!}
+                    </select>
+
+                    @error('group')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Section') }} <span class='text-danger'>*</span></label>
+                    <select name="section_id" class="form-select form-select-sm form-select-solid" data-control="select2"
+                        id="section_id" data-selected="{{ old('section_id', $student->studentSession?->section_id) }}"
+                        required>
+                        <option value="">{{ _lang('Select Class First') }}</option>
+                    </select>
+
+                    @error('section_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Gender') }} <span
+                            class="text-info">(optional)</span></label>
+                    <select name="gender" id="gender" class="form-select form-select-sm form-select-solid"
+                        data-control="select2">
+
+                        <option value="Male" {{ $student->gender == 'Male' ? 'selected' : '' }}>
+                            {{ _lang('Male') }}</option>
+                        <option value="Female" {{ $student->gender == 'Female' ? 'selected' : '' }}>
+                            {{ _lang('Female') }}</option>
+                    </select>
+
+                    @error('gender')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Roll No.') }} <span class='text-danger'>*</span></label>
+                    <input type="number" class="form-control" name="roll" value="{{ $student->studentSession?->roll }}"
+                        placeholder="Roll No." required>
+
+                    @error('roll')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Registration No.') }} <span
+                            class="text-info">(optional)</span>
+                    </label>
+                    <input type="number" class="form-control" name="registration_no"
+                        value="{{ $student->registration_no }}" placeholder="Register NO">
+
+                    @error('registration_no')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Blood Group') }} <span
+                            class="text-info">(optional)</span></label>
+                    <select name="blood_group" id="blood_group" class="form-select form-select-sm form-select-solid"
+                        data-control="select2">
+
+                        <option {{ $student->blood_group == 'A+' ? 'selected' : '' }} value="A+">N/A
+                        </option>
+                        <option {{ $student->blood_group == 'A+' ? 'selected' : '' }} value="A+">A+
+                        </option>
+                        <option {{ $student->blood_group == 'A-' ? 'selected' : '' }} value="A-">A-
+                        </option>
+                        <option {{ $student->blood_group == 'B+' ? 'selected' : '' }} value="B+">B+
+                        </option>
+                        <option {{ $student->blood_group == 'B-' ? 'selected' : '' }} value="B-">B-
+                        </option>
+                        <option {{ $student->blood_group == 'AB+' ? 'selected' : '' }} value="AB+">AB+
+                        </option>
+                        <option {{ $student->blood_group == 'AB-' ? 'selected' : '' }} value="AB-">AB-
+                        </option>
+                        <option {{ $student->blood_group == 'O+' ? 'selected' : '' }} value="O+">O+
+                        </option>
+                        <option {{ $student->blood_group == 'O-' ? 'selected' : '' }} value="O-">O-
+                        </option>
+                    </select>
+
+                    @error('blood_group')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Religion') }} <span
+                            class="text-info">(optional)</span></label>
+                    <select name="religion" id="religion" class="form-select form-select-sm form-select-solid"
+                        data-control="select2">
+
+                        {!! create_option('picklists', 'value', 'value', $student->religion, ['type' => 'Religion']) !!}
+
+                    </select>
+
+                    @error('religion')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="form-group">
+                <label class="my-2 control-label">{{ _lang('Admission Number') }}
+                    <span class="text-info">(optional)</span>
+                </label>
+                <input type="number" class="form-control" name="qr_code"
+                    value="{{ $student->studentSession?->qr_code }}" placeholder="Admission Number">
+
+                @error('qr_code')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Address') }} <span
+                            class="text-info">(optional)</span></label>
+                    <textarea class="form-control" name="address" id='address'> {{ $student->address }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="my-5 text-center col-lg-6">
+                <h2 class="block my-5 text-primary font_size_medium">
+                    <i class="bi bi-people-fill font_size_medium"></i>
+                    <strong>Guardian Information</strong>
+                </h2>
+                <p class="text-muted">
+                    Please provide the guardian's details for communication and emergency contact purposes.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="my-2 control-label">
+                        {{ _lang('Guardian Name') }}
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" name="information_sent_to_name"
+                        value="{{ $student->information_sent_to_name }}" placeholder="Enter Guardian Full Name" required>
+
+                    @error('information_sent_to_name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="my-2 control-label">
+                        {{ _lang('Guardian Email Address') }}
+                        <span class="text-info">(Optional)</span>
+                    </label>
+
+                    <input type="email" class="form-control" name="information_sent_to_email"
+                        value="{{ $student->parentInfo?->user?->email }}" placeholder="Enter Guardian Email Address">
+
+                    @error('information_sent_to_email')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="my-2 control-label">
+                        {{ _lang('Guardian Phone Number') }}
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" name="information_sent_to_phone"
+                        value="{{ $student->information_sent_to_phone }}" placeholder="Enter Guardian Phone Number"
+                        required>
+
+                    @error('information_sent_to_phone')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="my-2 control-label">
+                        {{ _lang('Relationship') }}
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-control" name="information_sent_to_relation" data-control="select2" required>
+                        <option value="">Select Relationship</option>
+                        <option value="Father" {{ $student->information_sent_to_relation == 'Father' ? 'selected' : '' }}>
+                            Father</option>
+                        <option value="Mother" {{ $student->information_sent_to_relation == 'Mother' ? 'selected' : '' }}>
+                            Mother</option>
+                        <option value="Brother"
+                            {{ $student->information_sent_to_relation == 'Brother' ? 'selected' : '' }}>
+                            Brother</option>
+                        <option value="Sister" {{ $student->information_sent_to_relation == 'Sister' ? 'selected' : '' }}>
+                            Sister</option>
+                        <option value="Uncle" {{ $student->information_sent_to_relation == 'Uncle' ? 'selected' : '' }}>
+                            Uncle</option>
+                        <option value="Aunt" {{ $student->information_sent_to_relation == 'Aunt' ? 'selected' : '' }}>
+                            Aunt
+                        </option>
+                        <option value="Grandfather"
+                            {{ $student->information_sent_to_relation == 'Grandfather' ? 'selected' : '' }}>Grandfather
+                        </option>
+                        <option value="Grandmother"
+                            {{ $student->information_sent_to_relation == 'Grandmother' ? 'selected' : '' }}>Grandmother
+                        </option>
+                        <option value="Other" {{ $student->information_sent_to_relation == 'Other' ? 'selected' : '' }}>
+                            Other</option>
+                    </select>
+
+                    @error('information_sent_to_relation')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="my-2 control-label">
+                        {{ _lang('Guardian Address') }}
+                        <span class="text-info">(Optional)</span>
+                    </label>
+                    <textarea class="form-control" name="information_sent_to_address" rows="3"
+                        placeholder="Enter Guardian Address">{{ $student->information_sent_to_address }}</textarea>
+
+                    @error('information_sent_to_address')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-6 my-5 text-center">
+                <h2 class="text-primary block my-5 font_size_medium">
+                    <i class="bi bi-lock-fill font_size_medium"></i>
+                    <strong>Login Details</strong>
+                </h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">
+                        {{ _lang('Email') }}
+                        <span class='text-danger'>*</span>
+                    </label>
+                    <input type="email" class="form-control" name="email" value="{{ $student->user?->email }}"
+                        required>
+
+                    @error('email')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">
+                        {{ _lang('Phone Number') }}
+                        <span class='text-danger'>*</span>
+                    </label>
+                    <input type="text" class="form-control" name="phone" value="{{ $student->user?->phone }}"
+                        min="10" max="15" placeholder="Phone" required>
+                    @error('phone')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Password') }}</label>
+                    <input type="text" class="form-control" name="password" value="">
+
+                    @error('password')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="form-group">
+                    <label class="control-label my-2">{{ _lang('Confirm Password') }}</label>
+                    <input type="text" class="form-control" name="password_confirmation" value="">
+
+                    @error('password_confirmation')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <!--begin::Thumbnail settings-->
+            <div class="card card-flush py-4">
+                <!--begin::Card header-->
+                <div class="card-header">
+                    <!--begin::Card title-->
+                    <div class="card-title">
+                        <h2>Student Picture <span class="text-info">(optional)</span></h2>
+                    </div>
+                    <!--end::Card title-->
+                </div>
+                <!--end::Card header-->
+                <!--begin::Card body-->
+                <div class="card-body text-center pt-0">
+                    <!--begin::Image input-->
+                    <!--begin::Image input placeholder-->
+
+                    @php
+                        $userImage = $student->user?->image;
+                        $hasCustomImage = $userImage && $userImage !== null;
+                        $imageUrl = $hasCustomImage
+                            ? asset('storage/users/' . $userImage)
+                            : asset('assets/media/svg/files/blank-image.svg');
+                        $imageUrlDark = $hasCustomImage
+                            ? asset('storage/users/' . $userImage)
+                            : asset('assets/media/svg/files/blank-image-dark.svg');
+                    @endphp
+
+                    <style>
+                        .image-input-placeholder {
+                            background-image: url('{{ $imageUrl }}');
+                        }
+
+                        [data-theme="dark"] .image-input-placeholder {
+                            background-image: url('{{ $imageUrlDark }}');
+                        }
+                    </style>
+
+
+                    <!--end::Image input placeholder-->
+                    <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
+                        data-kt-image-input="true">
+                        <!--begin::Preview existing image-->
+                        <div class="image-input-wrapper w-150px h-150px"></div>
+                        <!--end::Preview existing image-->
+                        <!--begin::Label-->
+                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change image">
+                            <i class="bi bi-pencil-fill fs-7"></i>
+                            <!--begin::Inputs-->
+                            <input type="file" name="image" accept=".png, .jpg, .jpeg" />
+                            <input type="hidden" name="image_remove" />
+                            <!--end::Inputs-->
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Cancel-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel image">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
+                        <!--end::Cancel-->
+                        <!--begin::Remove-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove image">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
+                        <!--end::Remove-->
+                    </div>
+                    <!--end::Image input-->
+                    <!--begin::Description-->
+                    <div class="text-muted fs-7">Set the product thumbnail image. Only *.png, *.jpg and *.jpeg image files
+                        are accepted</div>
+                    <!--end::Description-->
+                </div>
+                <!--end::Card body-->
+            </div>
+            <!--end::Thumbnail settings-->
+        </div>
+
+        <div class="form-group my-5">
+            <button type="submit" class="btn btn-primary mt-5">Update</button>
+        </div>
+    </form>
+@endsection
