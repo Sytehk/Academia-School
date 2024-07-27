@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/hostel",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Hostel\\": "app/",
+            "Modules\\Hostel\\Database\\Factories\\": "database/factories/",
+            "Modules\\Hostel\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Hostel\\Tests\\": "tests/"
+        }
+    }
+}
