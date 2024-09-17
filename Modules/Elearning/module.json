@@ -1,0 +1,11 @@
+{
+    "name": "Elearning",
+    "alias": "elearning",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Elearning\\Providers\\ElearningServiceProvider"
+    ],
+    "files": []
+}
