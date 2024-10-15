@@ -1,0 +1,11 @@
+{
+    "name": "Gateways",
+    "alias": "gateways",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Gateways\\Providers\\GatewaysServiceProvider"
+    ],
+    "files": []
+}
