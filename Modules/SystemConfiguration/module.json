@@ -1,0 +1,11 @@
+{
+    "name": "SystemConfiguration",
+    "alias": "systemconfiguration",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SystemConfiguration\\Providers\\SystemConfigurationServiceProvider"
+    ],
+    "files": []
+}
