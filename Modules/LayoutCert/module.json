@@ -1,0 +1,11 @@
+{
+    "name": "LayoutCert",
+    "alias": "layoutcert",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\LayoutCert\\Providers\\LayoutCertServiceProvider"
+    ],
+    "files": []
+}
