@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/parentmodule",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ParentModule\\": "app/",
+            "Modules\\ParentModule\\Database\\Factories\\": "database/factories/",
+            "Modules\\ParentModule\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\ParentModule\\Tests\\": "tests/"
+        }
+    }
+}

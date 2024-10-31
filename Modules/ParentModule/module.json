@@ -1,0 +1,11 @@
+{
+    "name": "ParentModule",
+    "alias": "parentmodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ParentModule\\Providers\\ParentModuleServiceProvider"
+    ],
+    "files": []
+}
