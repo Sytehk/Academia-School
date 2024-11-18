@@ -1,0 +1,101 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\DummyModel\DummyModelStoreRequest;
+use App\Http\Requests\DummyModel\DummyModelUpdateRequest;
+use App\Services\DummyModel\DummyModelService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Traits\ResponseTrait;
+
+class DummyClass extends Controller
+{
+    use ResponseTrait;
+
+    public function __construct(
+        private DummyModelService $service
+    ) {}
+
+    public function all(Request $request)
+    {
+        $models = $this->service->getAll($request);
+        $metadata['count'] = count($models);
+
+        if(!$models){
+            return $this->ResponseError([], null, 'No Data Found!');
+        }
+
+        return $this->ResponseSuccess($models, $metadata, 'DummyModel has been fetch successfully.');
+    }
+
+    public function index(Request $request)
+    {
+        $perPage = request('per_page') ?? env('PER_PAGE');
+        $models = $this->service->index($request, $perPage);
+        if(!$models){
+            return $this->ResponseError([], null, 'No Data Found!');
+        }
+
+        return $this->ResponseSuccess($models, null, 'DummyModel has been fetch successfully.');
+    }
+
+    public function store(DummyModelStoreRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $this->service->create($request->validated());
+            DB::commit();
+
+            return $this->ResponseSuccess($data, [], 'DummyModel has been create successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->ResponseError($e->getMessage(). " in " . $e->getFile() . " on line " . $e->getLine(), null, 'Data Process Error!');
+        }
+    }
+
+    public function show(int $id)
+    {
+        $model = $this->service->getById($id);
+        if(!$model){
+            return $this->ResponseError([], null, 'No Data Found!');
+        }
+
+        return $this->ResponseSuccess($model, null, 'DummyModel has been show successfully.');
+    }
+
+    public function update(DummyModelUpdateRequest $request, int $id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $this->service->update($id, $request->validated());
+            DB::commit();
+
+            return $this->ResponseSuccess($data, null, 'DummyModel has been update successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->ResponseError($e->getMessage(). " in " . $e->getFile() . " on line " . $e->getLine(), null, 'Data Process Error!');
+        }
+    }
+
+    public function destroy(int $id)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $this->service->delete($id);
+            if(!$data){
+                return $this->ResponseError([], null, 'Data Not Found!', 204);
+            }
+
+            DB::commit();
+            return $this->ResponseSuccess($data, null, 'DummyModel has been delete successfully.', 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return $this->ResponseError($e->getMessage(). " in " . $e->getFile() . " on line " . $e->getLine(), null, 'Data Not Found!');
+        }
+    }
+}

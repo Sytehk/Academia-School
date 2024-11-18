@@ -1,0 +1,100 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\DummyModel\DummyModelStoreRequest;
+use App\Http\Requests\DummyModel\DummyModelUpdateRequest;
+use App\Services\DummyModel\DummyModelService;
+use App\DataTables\DummyModel\DummyModelDataTable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
+
+class DummyClass extends Controller
+{
+    public function __construct(
+        private DummyModelService $service
+    ){}
+
+    public function all(Request $request): View
+    {
+        $models = $this->service->getAll($request);
+
+        return view('backend.model.index', compact('models'));
+    }
+
+    public function index(DummyModelDataTable $dataTable)
+    {
+        return $dataTable->render('backend.model.index');
+    }
+
+    public function create(): View
+    {
+        return view('backend.model.create');
+    }
+
+    public function store(DummyModelStoreRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $this->service->create($request->validated());
+            DB::commit();
+
+            Alert::toast('DummyModel has been create successfully.','success');
+            return redirect()->route('models.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Alert::error('Error', $e->getMessage());
+            return redirect()->route('models.index');
+        }
+
+    }
+
+    public function edit(int $id)
+    {
+        $model = $this->service->getById($id);
+
+        return view('backend.model.edit', compact('model'));
+    }
+
+    public function update(DummyModelUpdateRequest $request, int $id)
+    {
+        DB::beginTransaction();
+        try {
+            $this->service->update($id, $request->validated());
+
+            DB::commit();
+            Alert::toast('DummyModel has been update successfully.','success');
+
+            return redirect()->route('models.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Alert::error('Error', $e->getMessage());
+            return redirect()->route('models.index');
+        }
+
+    }
+
+    public function destroy(int $id)
+    {
+        DB::beginTransaction();
+        try {
+            $this->service->delete($id);
+
+            DB::commit();
+            Alert::toast('DummyModel has been delete successfully.','success');
+
+            return redirect()->route('models.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Alert::error('Error', $e->getMessage());
+
+            return redirect()->route('models.index');
+        }
+
+    }
+}

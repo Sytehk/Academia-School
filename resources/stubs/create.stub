@@ -1,0 +1,104 @@
+@extends('layouts.backend')
+
+@section('title', ucfirst('Model') . ' Form')
+@section('page_title', ucfirst('Model') . ' Form')
+
+@section('content')
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">{{ ucfirst('Model') }} Management</h1>
+            <a href="{{ route('models.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('models.store') }}" enctype="multipart/form-data" method="POST">
+                @csrf
+
+                <div class="row">
+                    <!-- Name -->
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">{{ _lang('Name') }}</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{{ old('name') }}" placeholder="Enter name" required>
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <!-- Code -->
+                    <div class="col-md-6 mb-3">
+                        <label for="code" class="form-label">{{ _lang('Code') }}</label>
+                        <input type="text" class="form-control" id="code" name="code"
+                               value="{{ old('code') }}" placeholder="Enter code">
+                        @error('code')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-4">
+                    <label class="form-label d-block mb-2">Image</label>
+
+                    <div class="card card-flush py-3">
+                        <div class="card-body text-center">
+                            <style>
+                                .image-input-placeholder {
+                                    background-image: url('{{ asset('assets/media/svg/files/blank-image.svg') }}');
+                                }
+                                [data-theme="dark"] .image-input-placeholder {
+                                    background-image: url('{{ asset('assets/media/svg/files/blank-image-dark.svg') }}');
+                                }
+                            </style>
+
+                            <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
+                                 data-kt-image-input="true">
+                                <div class="image-input-wrapper w-150px h-150px"></div>
+
+                                <!-- Upload -->
+                                <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                       data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change image">
+                                    <i class="bi bi-pencil-fill fs-7"></i>
+                                    <input type="file" name="image" accept=".png, .jpg, .jpeg" />
+                                    <input type="hidden" name="image_remove" />
+                                </label>
+
+                                <!-- Cancel -->
+                                <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                      data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel image">
+                                    <i class="bi bi-x fs-2"></i>
+                                </span>
+
+                                <!-- Remove -->
+                                <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                      data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove image">
+                                    <i class="bi bi-x fs-2"></i>
+                                </span>
+                            </div>
+
+                            <div class="text-muted fs-7">
+                                Set the product thumbnail image. Only *.png, *.jpg, and *.jpeg files are accepted.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check"></i> {{ _lang('Create') }}
+                    </button>
+                    <a href="{{ route('models.index') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
