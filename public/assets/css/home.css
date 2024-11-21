@@ -1,0 +1,59 @@
+  body {
+      font-family: Arial, sans-serif;
+  }
+
+  .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../background.png') no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 120px 20px;
+  }
+
+  .hero-section .btn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+  }
+
+  .feature-box {
+      padding: 40px;
+      text-align: center;
+      background: #f8f9fa;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 250px;
+      /* Fixed height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .testimonial {
+      background: #007bff;
+      color: white;
+      padding: 60px 0;
+  }
+
+  .footer {
+      background: #222;
+      color: white;
+      padding: 25px;
+      text-align: center;
+  }
+
+  .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+      font-size: 40px;
+      color: #007bff;
+      margin-bottom: 15px;
+  }
+
+  .brand_logo {
+      width: 170px;
+      height: 60px;
+  }
